@@ -5,10 +5,7 @@ import 'package:flutter/services.dart';
 import 'meditation_app.dart';
 
 void main() {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-    SystemUiOverlay.bottom
-  ]);
+
 
   runApp(const MyApp());
 }
