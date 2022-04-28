@@ -1,4 +1,5 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meditation_app/themes.dart';
@@ -13,36 +14,48 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final oriantation = MediaQuery.of(context).orientation;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kColorPrimary,
       body: SafeArea(
         child:  oriantation == Orientation.portrait ?
         Stack(
-          children: const [
-            // Align(
-            //   alignment: Alignment.bottomCenter,
-            //   child: FractionallySizedBox(
-            //     heightFactor: 0.6,
-            //     widthFactor: 1,
-            //     child: FittedBox(
-            //       alignment: Alignment.topCenter,
-            //       fit: BoxFit.cover,
-            //       child: SvgPicture.network(getstartedBackgound,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            GetStartedBody(),
-            FractionallySizedBox(
+          children: [
+            const GetStartedBody(),
+            const FractionallySizedBox(
                 widthFactor: 1,
                 heightFactor: 0.4,
                 child: GetStartedHeader()
+            ),
+            Align(
+              alignment: const Alignment(0.0, 0.8),
+              child:  GetStartedButton(
+                fixedSize: MaterialStateProperty.all(
+                    Size(
+                        size.width * 0.8,
+                        size.height * 0.065),
+                ),
+              textStyle: MaterialStateProperty.all(
+                PrimaryFont.medium(size.height * 0.015)
+              ),)
+
+            ),
+            Align(
+              alignment: Alignment(0.0, 0.95),
+              child: Container(
+                height: size.height * 0.0030,
+                width: size.width * 0.5,
+                decoration: const BoxDecoration(
+                    color: kColorLightGrey,
+                    borderRadius: BorderRadius.all(Radius.circular(5))
+                ),
+              ),
             )
-                ,]
+          ]
       ) :
       Row(
-        children: const [
-          Expanded(
+        children: [
+          const Expanded(
 
             child: FractionallySizedBox(
               heightFactor: 0.8,
@@ -50,13 +63,62 @@ class HomePage extends StatelessWidget {
               child: GetStartedHeader(),
             ),
           ),
-          Expanded(child: GetStartedBody(),)
+          Expanded(
+            child: Stack(
+              children: [
+                const GetStartedBody(),
+                Align(
+                    alignment: const Alignment(0.0, 0.9 ),
+                    child:  GetStartedButton(
+                      fixedSize: MaterialStateProperty.all(
+                        Size(
+                            size.width * 0.4,
+                            size.height * 0.065),
+                      ),
+                      textStyle: MaterialStateProperty.all(
+                          PrimaryFont.medium(size.height * 0.015)
+                      ),)
+
+                )
+
+              ],
+            ),)
 
 
         ],
     )
         ),
     );
+  }
+}
+
+class GetStartedButton extends StatelessWidget {
+   const GetStartedButton({Key? key, this.fixedSize, this.textStyle}) : super(key: key);
+
+  final MaterialStateProperty<Size>? fixedSize;
+  final MaterialStateProperty<TextStyle>? textStyle;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            backgroundColor: MaterialStateProperty.all(kColorLightGrey),
+            shape: MaterialStateProperty.all(
+              const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))
+              ),
+            ),
+            foregroundColor: MaterialStateProperty.all(kColorDarkGrey),
+            fixedSize: fixedSize,
+            textStyle: textStyle,
+
+        ),
+        onPressed: () {
+
+        },
+        child: const Text("GET STARTED",));
   }
 }
 
@@ -72,12 +134,13 @@ class GetStartedBody extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: FractionallySizedBox(
-        heightFactor: orientation == Orientation.portrait ?  0.6 : 0.9,
+        heightFactor: orientation == Orientation.portrait ?  0.6 : 0.8,
         widthFactor: 1,
         child: FittedBox(
           fit: BoxFit.cover,
           alignment: Alignment.topCenter,
           child: SvgPicture.network(getstartedBackgound),
+          clipBehavior: Clip.antiAlias,
         ),
       ),
     );
@@ -88,31 +151,35 @@ class GetStartedHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
     return Column(
         children: [
           Flexible(child: SvgPicture.network(getstartedLogo,
             alignment: const Alignment(0.0, -0.8),
           ),
-          flex: 2,
+          flex: orientation == Orientation.portrait ? 2 : 1,
           fit: FlexFit.tight,),
           Flexible(
-            child: FittedBox(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text: 'Hi Afsar, Welcome\n',
-                    style: PrimaryFont.medium(30).copyWith(
-                        color: kColorLightYellow),
-                    children: [
-                      TextSpan(
-                        text: 'to Silent Moon',
-                        style: PrimaryFont.thin(30).copyWith(
-                          color: kColorLightYellow,
-                          fontWeight: FontWeight.w100,
-                        ),
-                      )
+            child: FractionallySizedBox(
+              widthFactor: 0.9,
+              child: FittedBox(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      text: 'Hi Afsar, Welcome\n',
+                      style: PrimaryFont.medium(30).copyWith(
+                          color: kColorLightYellow),
+                      children: [
+                        TextSpan(
+                          text: 'to Silent Moon',
+                          style: PrimaryFont.thin(30).copyWith(
+                            color: kColorLightYellow,
+                            fontWeight: FontWeight.w100,
+                          ),
+                        )
 
-                    ]
+                      ]
+                  ),
                 ),
               ),
             ),
